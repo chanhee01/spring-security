@@ -1,20 +1,33 @@
-package security.springsecurity.config.auth;
+package security.springsecurity.config;
 
+import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import security.springsecurity.Model.User;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
-public class PrincipalDetails implements UserDetails {
+@Data
+public class PrincipalDetails implements UserDetails, OAuth2User {
     // UserDetails를 implements 했으니
     // Security Session => Authentication => UserDetails(PrincipalDetails)
 
     private User user;
 
+    private Map<String, Object> attributes;
+
+    // 일반 로그인
     public PrincipalDetails(User user) {
         this.user = user;
+    }
+
+    // OAuth 로그인
+    public PrincipalDetails(User user, Map<String, Object> attributes) {
+        this.user = user;
+        this.attributes = attributes;
     }
 
     // 해당 User의 권한을 리턴
@@ -63,5 +76,16 @@ public class PrincipalDetails implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public Map<String, Object> getAttributes() {
+        return attributes;
+    }
+
+    @Override
+    public String getName() {
+        return null;
+        // 어차피 잘 사용 안하니 null
     }
 }

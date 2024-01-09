@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import security.springsecurity.Model.User;
+import security.springsecurity.config.PrincipalDetails;
 import security.springsecurity.repository.UserRepository;
 
 // 시큐리티 설정에서 loginProcessingUrl("/login");
