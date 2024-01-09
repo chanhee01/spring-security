@@ -21,6 +21,9 @@ public class User {
     private String password;
     private String role;
 
+    private String provider; // ex) google
+    private String providerId;
+
     // ENUM으로 안하고 ,로 해서 구분해서 ROLE을 입력 -> 그걸 파싱!!
     public List<String> getRoleList() {
         if (this.role.length() > 0) {
