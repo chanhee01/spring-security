@@ -1,4 +1,4 @@
-package security.springsecurity.config;
+package security.springsecurity.config.auth;
 
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;

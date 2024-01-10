@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import security.springsecurity.Model.User;
-import security.springsecurity.config.PrincipalDetails;
+import security.springsecurity.config.auth.PrincipalDetails;
 import security.springsecurity.repository.UserRepository;
 
 @Controller

@@ -8,7 +8,10 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import security.springsecurity.Model.User;
-import security.springsecurity.config.PrincipalDetails;
+import security.springsecurity.config.auth.PrincipalDetails;
+import security.springsecurity.config.oauth.provider.FacebookUserInfo;
+import security.springsecurity.config.oauth.provider.GoogleUserInfo;
+import security.springsecurity.config.oauth.provider.OAuth2UserInfo;
 import security.springsecurity.repository.UserRepository;
 
 @Service
@@ -32,12 +35,21 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         // 구글 로그인 버튼 클릭 -> 구글 로그인 창 -> 로그인 완료 -> code를 리턴 -> OAuth-client 라이브러리가 코드를 통해 AccessToken 요청
         // Token으로 부터 받아온 userRequest 정보로 회원 프로필을 받아야 하는데, 이때 사용되는 함수가 loadUser 함수
 
+        OAuth2UserInfo oAuth2UserInfo = null;
+        if(userRequest.getClientRegistration().getRegistrationId().equals("google")) {
+            oAuth2UserInfo = new GoogleUserInfo(oAuth2User.getAttributes());
+        } else if (userRequest.getClientRegistration().getRegistrationId().equals("facebook")) {
+            oAuth2UserInfo = new FacebookUserInfo(oAuth2User.getAttributes());
+        } else {
+            System.out.println("구글과 페이스북 로그인만 지원합니다.");
+        }
+
         // 회원가입 진행
-        String provider = userRequest.getClientRegistration().getClientId(); // google
-        String providerId = oAuth2User.getAttribute("sub");
+        String provider = oAuth2UserInfo.getProvider();
+        String providerId = oAuth2UserInfo.getProviderId();
         String username = provider+"_"+providerId;
         String password = bCryptPasswordEncoder.encode("password"); // OAuth 로그인을 하면 password가 필요없긴 함
-        String email = oAuth2User.getAttribute("email");
+        String email = oAuth2UserInfo.getEmail();
         String role = "ROLE_USER";
 
         User userEntity = userRepository.findByUsername(username);
