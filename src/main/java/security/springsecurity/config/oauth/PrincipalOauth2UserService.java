@@ -11,8 +11,11 @@ import security.springsecurity.Model.User;
 import security.springsecurity.config.auth.PrincipalDetails;
 import security.springsecurity.config.oauth.provider.FacebookUserInfo;
 import security.springsecurity.config.oauth.provider.GoogleUserInfo;
+import security.springsecurity.config.oauth.provider.NaverUserInfo;
 import security.springsecurity.config.oauth.provider.OAuth2UserInfo;
 import security.springsecurity.repository.UserRepository;
+
+import java.util.Map;
 
 @Service
 public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
@@ -40,8 +43,8 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
             oAuth2UserInfo = new GoogleUserInfo(oAuth2User.getAttributes());
         } else if (userRequest.getClientRegistration().getRegistrationId().equals("facebook")) {
             oAuth2UserInfo = new FacebookUserInfo(oAuth2User.getAttributes());
-        } else {
-            System.out.println("구글과 페이스북 로그인만 지원합니다.");
+        } else if (userRequest.getClientRegistration().getRegistrationId().equals("naver")) {
+            oAuth2UserInfo = new NaverUserInfo((Map<String, Object>) oAuth2User.getAttributes().get("response"));
         }
 
         // 회원가입 진행
